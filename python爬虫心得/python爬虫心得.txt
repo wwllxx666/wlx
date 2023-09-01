@@ -1,0 +1,19 @@
+import requests
+from bs4 import  BeautifulSoup
+
+headers = {
+    "User-Agent":"Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/86.0.4240.198 Safari/537.36"
+}
+# 一共有十个页面，通过一个for循环来实现  0：初始页  250：一共只有？start225，range里面是不包括本身的那个值所以是250  25：每次循环的页数
+for i in range(0,250,25):
+    # response，htmal，soup，all_titls，title是变量名
+    response = requests.get(f"https://movie.douban.com/top250?start={i}",headers=headers)
+        # print(response.status_code)   status_code:查询返回的状态码
+    htmal = response.text
+        # BeautifulSoup是个解析器，html.parser是用来指定解析器 解析html的
+    soup = BeautifulSoup(htmal,"html.parser")
+    all_titls = soup.find_all("span",attrs={"class":"title"})
+    for title in all_titls:
+        a=title.string
+        if "/" not in a:
+            print(a)
